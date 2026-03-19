@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>マイ・デスティニー・メーカー | 運命捏造アプリ</title>
     <style>
-        :root { --gold: #d4af37; --purple: #4b0082; --buddha-gold: #fff700; }
+        :root { --gold: #d4af37; --purple: #4b0082; --fire-orange: #ff4500; --fire-gold: #ffdad0; }
         body { background-color: #0d001a; color: var(--gold); font-family: 'Hiragino Mincho ProN', 'serif'; text-align: center; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { max-width: 500px; padding: 20px; border: 2px solid var(--gold); background: rgba(75, 0, 130, 0.1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); border-radius: 15px; position: relative; z-index: 1; }
         h1 { font-size: 1.8em; letter-spacing: 0.2em; text-shadow: 0 0 10px var(--gold); }
@@ -14,7 +14,7 @@
         .crystal-ball:active { transform: scale(0.9); }
         .crystal-ball::after { content: "運命を捏造"; color: white; font-weight: bold; font-size: 0.9em; text-shadow: 0 0 5px black; }
         input { background: #1a0033; border: 1px solid var(--gold); color: white; padding: 12px; width: 80%; border-radius: 5px; font-size: 1em; margin-top: 10px; }
-        #result { margin-top: 30px; padding: 20px; font-size: 1.1em; min-height: 120px; border-top: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: #fff; line-height: 1.6; }
+        #result { margin-top: 30px; padding: 20px; font-size: 1.1em; min-height: 120px; border-top: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: #fff; line-height: 1.6; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
         .footer-btns { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         button { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; border-radius: 20px; }
         button:hover { background: var(--gold); color: #000; }
@@ -23,27 +23,28 @@
         @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px,5px); } 50% { transform: translate(-5px,5px); } 75% { transform: translate(5px,-5px); } 100% { transform: translate(0,0); } }
         .shake { animation: shake 0.1s infinite; }
 
-        /* 観音様降臨エフェクト */
-        #buddha-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; flex-direction: column; opacity: 0; transition: opacity 0.5s; }
+        /* 火の鳥降臨エフェクト */
+        #buddha-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,69,0,0.3) 0%, rgba(0,0,0,0.9) 80%); display: none; justify-content: center; align-items: center; z-index: 100; flex-direction: column; opacity: 0; transition: opacity 0.5s; }
         #buddha-overlay.show { display: flex; opacity: 1; }
         
-        /* 観音様の「後光（爆発）」 */
-        .gokou { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, var(--buddha-gold) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; animation: gokou-burst 1.5s ease-out infinite; opacity: 0.8; }
-        @keyframes gokou-burst { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        /* 火の鳥の「炎の後光（爆発）」 */
+        .gokou { position: absolute; width: 350px; height: 350px; background: radial-gradient(circle, var(--fire-orange) 0%, rgba(255,218,208,0) 70%); border-radius: 50%; animation: gokou-burst 1.2s ease-out infinite; opacity: 0.8; mix-blend-mode: screen; }
+        @keyframes gokou-burst { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(3.0); opacity: 0; } }
 
-        /* 観音様の文字シルエット */
-        .buddha-icon { font-size: 10em; color: var(--buddha-gold); text-shadow: 0 0 20px var(--buddha-gold), 0 0 50px white; position: relative; z-index: 101; animation: buddha-float 2s ease-in-out infinite; }
-        @keyframes buddha-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        /* 火の鳥の絵文字シルエット */
+        .buddha-icon { font-size: 12em; color: var(--fire-gold); text-shadow: 0 0 30px var(--fire-orange), 0 0 60px white; position: relative; z-index: 101; animation: buddha-float 1.5s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--fire-orange)); }
+        @keyframes buddha-float { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
 
-        .thanks-text { font-size: 3em; color: white; font-weight: bold; text-shadow: 0 0 10px var(--buddha-gold); margin-top: 20px; position: relative; z-index: 101; letter-spacing: 0.3em; }
+        .thanks-text { font-size: 2.5em; color: white; font-weight: bold; text-shadow: 0 0 15px var(--fire-orange); margin-top: 20px; position: relative; z-index: 101; letter-spacing: 0.2em; line-height: 1.2; }
     </style>
 </head>
 <body>
 
     <div id="buddha-overlay" onclick="hideBuddha()">
         <div class="gokou"></div>
-        <div class="buddha-icon">🐦‍🔥</div> <div class="thanks-text">ありがとう！</div>
-        <p style="color:var(--gold); z-index:101; margin-top:30px;">（タップで下界に戻る）</p>
+        <div class="buddha-icon">🐦‍🔥</div> 
+        <div id="thanks-message" class="thanks-text">ありがとう！</div>
+        <p style="color:var(--fire-gold); z-index:101; margin-top:30px; text-shadow: 0 0 5px black;">（タップして下界に戻る）</p>
     </div>
 
     <div class="container">
@@ -65,11 +66,42 @@
     </div>
 
     <script>
+        // --- 予言テンプレートの大幅増量（20パターン） ---
         const templates = [
             "【審判】汝が願う「${wish}」は、宇宙会議で全会一致で承認された。明日、近所のポストが赤く見えるなら、それは成功の兆しである。",
             "【福音】素晴らしい。「${wish}」は既に完了している。今の汝は、完了した後の世界を追体験しているに過ぎない。安心して二度寝せよ。",
             "【混沌】「${wish}」の運勢は絶好調だが、あまりのパワーに守護霊がビビって有給休暇を取った。代わりに、道端のタンポポが汝を応援している。",
-            "【真理】占いなど不要。「${wish}」を今この瞬間に『叶った』と念じれば、物理法則が勝手に書き換わる。ラッキーアイテムは、昨日からそこにある空気だ。"
+            "【真理】占いなど不要。「${wish}」を今この瞬間に『叶った』と念じれば、物理法則が勝手に書き換わる。ラッキーアイテムは、昨日からそこにある空気だ。",
+            "【転生】汝は今、「${wish}」を達成した世界線へと転生した。前の世界線の記憶は、帰りにコンビニで買うアイスの味と共に消え去るであろう。",
+            "【爆発】「${wish}」への情熱が臨界点を超えた。明日、汝のやる気が大爆発し、周囲を呆れさせるほどの成果を出す（かもしれない）。",
+            "【全肯定】あなたが「${wish}」と願った、その尊い心こそが既に大吉である。結果などどうでも良い。今のあなたは、宇宙で一番輝いている。",
+            "【責任転嫁】「${wish}」が叶わない原因は、地球の地軸がわずかに傾いているせいです。あなたは一切悪くありません。今日の開運アクションは、空に向かって『私のせいじゃない！』と叫ぶことです（小声で可）。",
+            "【シュール】「${wish}」の運勢は、今、後ろを通り過ぎた幽霊が持ち去りました。代わりに、15時ごろに「あ、今なんかいい感じ」という根拠のない自信が届きます。",
+            "【虚無】「${wish}」の達成率は現在1000%です。しかし、それを感じるための感覚器官がまだ未実装です。アップデートを待て。",
+            "【伝説】汝の「${wish}」への執念は、後の世に『定時退社の乱』として語り継がれるであろう。ラッキーアイテムは、誰にも見られない角度で押す『Enterキー』だ。",
+            "【奇跡】今日、汝の前に現れる全ての信号が青になる。それは「${wish}」へのゴーサインである。もし赤だったら、それは『ちょっと休め』という宇宙の優しさだ。",
+            "【洗脳】汝は今から、「${wish}」が叶ったと信じ込む。はい、信じた。これで運命は変わった。おめでとう。",
+            "【美食】「${wish}」を達成するためには、まず美味しいパスタを食べる必要がある。アルデンテの食感が、運命の歯車を回す鍵となる。",
+            "【筋肉】汝が「${wish}」を願うたびに、腹筋が1回カウントされる。叶う頃には、汝はバキバキの肉体を手に入れているであろう。",
+            "【逃避】「${wish}」が叶う世界へと続く扉は、今、あなたの部屋の押し入れの奥に繋がった。行くか行かないかは、あなたの勇気次第だ。",
+            "【透明】今日のあなたの運勢は『透明』です。良くも悪くもなく、ただそこに存在しています。15時ごろに吹く風に『自分は今、風になっている』と感じれば、大吉に昇格します。",
+            "【猫】汝の「${wish}」は、近所の猫が勝手に承認しました。猫が顔を洗ったら成功、昼寝をしたら大成功です。",
+            "【課金】「${wish}」の達成には、あと3徳足りません。今すぐ0円課金をして、火の鳥に祈りを捧げなさい。",
+            "【宇宙】汝の「${wish}」は、アンドロメダ銀河の果てまで届いた。返事が来るのは数億年後だが、運勢は今この瞬間に爆上がりした。"
+        ];
+
+        // --- 0円課金のメッセージ増量（10パターン） ---
+        const thanksMessages = [
+            "ありがとう！<br>火の鳥があなたの徳を<br>無限に承認しました！",
+            "素晴らしい！<br>0円で宇宙の真理に<br>一歩近づきました！",
+            "ブラボー！<br>火の鳥の羽が1枚<br>黄金に輝き出しました！",
+            "感謝します！<br>あなたの財布は守られた。<br>これが最大の幸運だ！",
+            "おめでとう！<br>徳がインフレーションを起こし<br>カンストしました！",
+            "火の鳥が<br>あなたの無意味な行為を<br>全力で祝福しています！",
+            "0円課金成功！<br>これで明日の朝は<br>スッキリ起きられます（諸説あり）",
+            "あなたの魂は<br>今、アルデンテに<br>救われました！",
+            "火の鳥が<br>あなたの「どうでもいい」<br>という悟りを肯定しました！",
+            "ありがとう！<br>浮いたお金で<br>コンビニスイーツを買うのです！"
         ];
 
         function revealFate() {
@@ -83,20 +115,27 @@
             setTimeout(() => {
                 ball.classList.remove('shake');
                 const randomText = templates[Math.floor(Math.random() * templates.length)];
+                // ${wish}の部分を入力された文字に置き換える
                 res.innerHTML = randomText.replace("${wish}", wish);
             }, 1000);
         }
 
-        // 観音様を降臨させる関数
+        // 火の鳥を降臨させる関数
         function showBuddha() {
             const overlay = document.getElementById('buddha-overlay');
+            const thanksMsg = document.getElementById('thanks-message');
+            
+            // ランダムな感謝メッセージを選択
+            const randomMsg = thanksMessages[Math.floor(Math.random() * thanksMessages.length)];
+            thanksMsg.innerHTML = randomMsg;
+
             overlay.style.display = 'flex';
             setTimeout(() => {
                 overlay.classList.add('show');
             }, 10);
         }
 
-        // 観音様にお引き取り願う関数
+        // 火の鳥にお引き取り願う関数
         function hideBuddha() {
             const overlay = document.getElementById('buddha-overlay');
             overlay.classList.remove('show');
