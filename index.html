@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイ・デスティニー・メーカー | 運命捏造アプリ</title>
+    <style>
+        :root { --gold: #d4af37; --purple: #4b0082; }
+        body { background-color: #0d001a; color: var(--gold); font-family: 'Hiragino Mincho ProN', 'serif'; text-align: center; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        .container { max-width: 500px; padding: 20px; border: 2px solid var(--gold); background: rgba(75, 0, 130, 0.1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); border-radius: 15px; }
+        h1 { font-size: 1.8em; letter-spacing: 0.2em; text-shadow: 0 0 10px var(--gold); }
+        .crystal-ball { width: 180px; height: 180px; background: radial-gradient(circle at 30% 30%, #a855f7, #2e004d); border-radius: 50%; margin: 30px auto; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px #8b5cf6; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.2); }
+        .crystal-ball:hover { transform: scale(1.05); box-shadow: 0 0 80px #d4af37; }
+        .crystal-ball:active { transform: scale(0.9); }
+        .crystal-ball::after { content: "運命を捏造"; color: white; font-weight: bold; font-size: 0.9em; text-shadow: 0 0 5px black; }
+        input { background: #1a0033; border: 1px solid var(--gold); color: white; padding: 12px; width: 80%; border-radius: 5px; font-size: 1em; margin-top: 10px; }
+        #result { margin-top: 30px; padding: 20px; font-size: 1.1em; min-height: 120px; border-top: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: #fff; }
+        .footer-btns { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        button { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; border-radius: 20px; }
+        button:hover { background: var(--gold); color: #000; }
+        @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px,5px); } 50% { transform: translate(-5px,5px); } 75% { transform: translate(5px,-5px); } 100% { transform: translate(0,0); } }
+        .shake { animation: shake 0.1s infinite; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔮 俺様預言書 🔮</h1>
+        <p style="font-size: 0.8em; opacity: 0.8;">※このアプリはあなたの願いを勝手に肯定します</p>
+        
+        <input type="text" id="user-wish" placeholder="例：宝くじを当てる、猫を撫でる">
+        
+        <div id="ball" class="crystal-ball" onclick="revealFate()"></div>
+
+        <div id="result">
+            あなたの意志を水晶に入力してください...
+        </div>
+
+        <div class="footer-btns">
+            <button onclick="alert('徳が1上がりました。現在、あなたの徳は【カンスト】しています。')">0円課金（徳を積む）</button>
+            <button onclick="alert('全責任を火星の自転になすりつけました。あなたは清廉潔白です。')">責任転嫁</button>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            "【審判】汝が願う「${wish}」は、宇宙会議で全会一致で承認された。明日、近所のポストが赤く見えるなら、それは成功の兆しである。",
+            "【福音】素晴らしい。「${wish}」は既に完了している。今の汝は、完了した後の世界を追体験しているに過ぎない。安心して二度寝せよ。",
+            "【混沌】「${wish}」の運勢は絶好調だが、あまりのパワーに守護霊がビビって有給休暇を取った。代わりに、道端のタンポポが汝を応援している。",
+            "【真理】占いなど不要。「${wish}」を今この瞬間に『叶った』と念じれば、物理法則が勝手に書き換わる。ラッキーアイテムは、昨日からそこにある空気だ。"
+        ];
+
+        function revealFate() {
+            const wish = document.getElementById('user-wish').value || "素敵な一日";
+            const ball = document.getElementById('ball');
+            const res = document.getElementById('result');
+            
+            ball.classList.add('shake');
+            res.innerHTML = "<strong>捏造中...</strong>";
+
+            setTimeout(() => {
+                ball.classList.remove('shake');
+                const randomText = templates[Math.floor(Math.random() * templates.length)];
+                res.innerHTML = randomText.replace("${wish}", wish);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
