@@ -5,24 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>マイ・デスティニー・メーカー | 運命捏造アプリ</title>
     <style>
-        :root { --gold: #d4af37; --purple: #4b0082; }
+        :root { --gold: #d4af37; --purple: #4b0082; --buddha-gold: #fff700; }
         body { background-color: #0d001a; color: var(--gold); font-family: 'Hiragino Mincho ProN', 'serif'; text-align: center; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .container { max-width: 500px; padding: 20px; border: 2px solid var(--gold); background: rgba(75, 0, 130, 0.1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); border-radius: 15px; }
+        .container { max-width: 500px; padding: 20px; border: 2px solid var(--gold); background: rgba(75, 0, 130, 0.1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); border-radius: 15px; position: relative; z-index: 1; }
         h1 { font-size: 1.8em; letter-spacing: 0.2em; text-shadow: 0 0 10px var(--gold); }
         .crystal-ball { width: 180px; height: 180px; background: radial-gradient(circle at 30% 30%, #a855f7, #2e004d); border-radius: 50%; margin: 30px auto; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px #8b5cf6; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.2); }
         .crystal-ball:hover { transform: scale(1.05); box-shadow: 0 0 80px #d4af37; }
         .crystal-ball:active { transform: scale(0.9); }
         .crystal-ball::after { content: "運命を捏造"; color: white; font-weight: bold; font-size: 0.9em; text-shadow: 0 0 5px black; }
         input { background: #1a0033; border: 1px solid var(--gold); color: white; padding: 12px; width: 80%; border-radius: 5px; font-size: 1em; margin-top: 10px; }
-        #result { margin-top: 30px; padding: 20px; font-size: 1.1em; min-height: 120px; border-top: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: #fff; }
+        #result { margin-top: 30px; padding: 20px; font-size: 1.1em; min-height: 120px; border-top: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: #fff; line-height: 1.6; }
         .footer-btns { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         button { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; border-radius: 20px; }
         button:hover { background: var(--gold); color: #000; }
+        
+        /* 演出用アニメーション */
         @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px,5px); } 50% { transform: translate(-5px,5px); } 75% { transform: translate(5px,-5px); } 100% { transform: translate(0,0); } }
         .shake { animation: shake 0.1s infinite; }
+
+        /* 観音様降臨エフェクト */
+        #buddha-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; flex-direction: column; opacity: 0; transition: opacity 0.5s; }
+        #buddha-overlay.show { display: flex; opacity: 1; }
+        
+        /* 観音様の「後光（爆発）」 */
+        .gokou { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, var(--buddha-gold) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; animation: gokou-burst 1.5s ease-out infinite; opacity: 0.8; }
+        @keyframes gokou-burst { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+
+        /* 観音様の文字シルエット */
+        .buddha-icon { font-size: 10em; color: var(--buddha-gold); text-shadow: 0 0 20px var(--buddha-gold), 0 0 50px white; position: relative; z-index: 101; animation: buddha-float 2s ease-in-out infinite; }
+        @keyframes buddha-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .thanks-text { font-size: 3em; color: white; font-weight: bold; text-shadow: 0 0 10px var(--buddha-gold); margin-top: 20px; position: relative; z-index: 101; letter-spacing: 0.3em; }
     </style>
 </head>
 <body>
+
+    <div id="buddha-overlay" onclick="hideBuddha()">
+        <div class="gokou"></div>
+        <div class="buddha-icon">卍</div> <div class="thanks-text">ありがとう！</div>
+        <p style="color:var(--gold); z-index:101; margin-top:30px;">（タップで下界に戻る）</p>
+    </div>
 
     <div class="container">
         <h1>🔮 俺様預言書 🔮</h1>
@@ -37,7 +59,7 @@
         </div>
 
         <div class="footer-btns">
-            <button onclick="alert('徳が1上がりました。現在、あなたの徳は【カンスト】しています。')">0円課金（徳を積む）</button>
+            <button onclick="showBuddha()">0円課金（徳を積む）</button>
             <button onclick="alert('全責任を火星の自転になすりつけました。あなたは清廉潔白です。')">責任転嫁</button>
         </div>
     </div>
@@ -63,6 +85,24 @@
                 const randomText = templates[Math.floor(Math.random() * templates.length)];
                 res.innerHTML = randomText.replace("${wish}", wish);
             }, 1000);
+        }
+
+        // 観音様を降臨させる関数
+        function showBuddha() {
+            const overlay = document.getElementById('buddha-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
+        }
+
+        // 観音様にお引き取り願う関数
+        function hideBuddha() {
+            const overlay = document.getElementById('buddha-overlay');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
         }
     </script>
 </body>
